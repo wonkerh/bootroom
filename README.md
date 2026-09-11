@@ -8,7 +8,7 @@ Browse the room, filter by the surface you actually play on, pick your size, add
 
 ## Live demo
 
-https://YOUR-USERNAME.github.io/bootroom/
+https://wonkerh.io/bootroom/
 
 ---
 
