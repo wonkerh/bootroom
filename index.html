@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BOOTROOM — Match-Tested Soccer Boots</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ====== HOMEPAGE-ONLY STYLES ====== */
+
+/* --- HERO --- */
+.home-hero{
+  background: linear-gradient(120deg, #F6F6F8 0%, #FFFFFF 60%);
+  padding: 0; overflow: hidden;
+  border-bottom: 1px solid var(--line);
+}
+.home-hero .wrap{
+  display: grid; grid-template-columns: 1fr 1.05fr;
+  gap: 0; align-items: stretch; min-height: 560px;
+}
+.hero-copy{
+  padding: 72px 40px 72px 0; display: flex; flex-direction: column; justify-content: center;
+}
+.hero-eyebrow{
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; color: var(--red);
+  margin-bottom: 20px;
+}
+.hero-eyebrow span{
+  display: inline-block; width: 24px; height: 2px; background: var(--red);
+}
+.hero-copy h1{
+  font-size: 60px; line-height: 1.02; letter-spacing: -1.5px;
+  font-weight: 800; margin-bottom: 24px; color: var(--ink);
+}
+.hero-copy h1 em{
+  font-style: normal; color: var(--red);
+  position: relative; white-space: nowrap;
+}
+.hero-copy h1 em::after{
+  content: ''; position: absolute; left: 0; right: 0; bottom: 4px;
+  height: 8px; background: rgba(199,0,0,0.12); z-index: -1;
+}
+.hero-copy p{
+  font-size: 16px; line-height: 1.65; color: var(--body);
+  max-width: 480px; margin-bottom: 32px;
+}
+.hero-cta{ display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 44px; }
+.hero-cta .btn-primary{ padding: 17px 34px; }
+.hero-cta .btn-secondary{ margin-left: 0; padding: 16px 32px; }
+.hero-stats{
+  display: flex; gap: 44px; padding-top: 32px;
+  border-top: 1px solid var(--line);
+}
+.hero-stats > div{ display: flex; flex-direction: column; gap: 4px; }
+.hero-stats strong{
+  font-size: 26px; font-weight: 800; color: var(--ink); letter-spacing: -0.5px;
+}
+.hero-stats span{
+  font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+  color: var(--muted); font-weight: 600;
+}
+.hero-visual{
+  background: radial-gradient(circle at 65% 40%, #FFFFFF 0%, #EDEDED 70%);
+  display: flex; align-items: center; justify-content: center;
+  padding: 56px; position: relative;
+}
+.hero-visual::before{
+  content: 'FEATURED'; position: absolute; top: 32px; left: 32px;
+  font-size: 11px; letter-spacing: 3px; font-weight: 700;
+  color: var(--red); padding-left: 30px;
+}
+.hero-visual::before::after{
+  content: ''; position: absolute; left: 0; top: 50%; width: 22px; height: 1px;
+  background: var(--red);
+}
+.hero-visual .hero-img-wrap{
+  max-width: 460px; width: 100%;
+  transform: rotate(-6deg);
+  aspect-ratio: 4/3;
+  display: flex; align-items: center; justify-content: center;
+}
+.hero-visual .hero-img-wrap img{
+  width: 100%; height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,.15));
+}
+.hero-visual .hero-img-wrap svg{ width: 100%; height: auto; }
+.hero-visual .price-tag{
+  position: absolute; bottom: 32px; right: 32px;
+  background: #fff; border: 1px solid var(--line); padding: 14px 20px;
+  box-shadow: 0 12px 30px rgba(0,0,0,.08);
+}
+.hero-visual .price-tag small{
+  display: block; font-size: 10px; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--muted); margin-bottom: 4px;
+  font-weight: 700;
+}
+.hero-visual .price-tag strong{
+  font-size: 20px; font-weight: 800; color: var(--ink); letter-spacing: -0.5px;
+}
+
+/* --- SECTION HEADER --- */
+.sec{ padding: 80px 0; }
+.sec-head{
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 24px; margin-bottom: 40px; flex-wrap: wrap;
+}
+.sec-head h2{
+  font-size: 36px; letter-spacing: -0.8px; line-height: 1.1;
+  max-width: 640px;
+}
+.sec-head p{
+  font-size: 14px; color: var(--muted); max-width: 420px;
+  line-height: 1.6;
+}
+.sec-head a.link{
+  font-size: 13px; font-weight: 700; color: var(--red);
+  text-transform: uppercase; letter-spacing: 1px;
+  white-space: nowrap; border-bottom: 1px solid var(--red); padding-bottom: 3px;
+}
+.sec-head a.link:hover{ opacity: 0.7; }
+
+/* --- SURFACE TILES --- */
+.surfaces{
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+}
+.surface-tile{
+  display: block; position: relative; overflow: hidden;
+  aspect-ratio: 4/5; background: var(--panel);
+  transition: transform .3s;
+}
+.surface-tile:hover{ transform: translateY(-4px); }
+.surface-tile .tile-art{
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  padding: 30px 20px 90px;
+  overflow: hidden;
+}
+.surface-tile .tile-art img{
+  width: 130%; height: 100%;
+  object-fit: contain;
+  transition: transform .4s;
+}
+.surface-tile:hover .tile-art img{ transform: scale(1.06) rotate(-2deg); }
+.surface-tile .tile-art svg{ width: 130%; height: auto; }
+.surface-tile .tile-body{
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: 24px 24px 22px;
+  background: linear-gradient(180deg, transparent, rgba(255,255,255,.94) 30%);
+}
+.surface-tile .tile-body small{
+  display: block; font-size: 10px; letter-spacing: 1.5px;
+  text-transform: uppercase; color: var(--red); font-weight: 700;
+  margin-bottom: 6px;
+}
+.surface-tile .tile-body h3{
+  font-size: 20px; letter-spacing: -0.4px; margin-bottom: 4px;
+}
+.surface-tile .tile-body span{
+  font-size: 12px; color: var(--muted);
+}
+.surface-tile:hover .tile-body h3{ color: var(--red); }
+
+/* --- FEATURED GRID --- */
+.featured-wrap{
+  background: var(--panel);
+  padding: 80px 0;
+}
+.featured-wrap .sec-head h2{ color: var(--ink); }
+
+/* Make sure the shared card markup renders well here too */
+.featured-wrap .product-media{ background: #fff; }
+.product-card:hover .product-media .hover-img{ opacity: 1 !important; }
+.product-card:hover .product-media img:first-of-type{ opacity: 0 !important; }
+.product-media img{ transition: opacity .35s ease, transform .35s ease; }
+
+/* --- BRAND STRIP --- */
+.brands{
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 40px 0; overflow: hidden;
+}
+.brands-inner{
+  display: flex; align-items: center; gap: 60px;
+  justify-content: space-between; flex-wrap: wrap;
+}
+.brand-logo{
+  font-size: 22px; font-weight: 800; letter-spacing: -0.5px;
+  color: var(--muted); text-transform: uppercase;
+  transition: color .2s; white-space: nowrap;
+}
+.brand-logo:hover{ color: var(--red); }
+
+/* --- WHY US --- */
+.why{
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  gap: 0; border-top: 1px solid var(--line);
+}
+.why-item{
+  padding: 44px 36px 44px 0;
+  border-right: 1px solid var(--line);
+}
+.why-item:last-child{ border-right: none; padding-right: 0; }
+.why-item:not(:first-child){ padding-left: 36px; }
+.why-num{
+  font-size: 13px; font-weight: 800; letter-spacing: 2px;
+  color: var(--red); margin-bottom: 18px;
+}
+.why-item h3{
+  font-size: 22px; letter-spacing: -0.4px; line-height: 1.25;
+  margin-bottom: 12px;
+}
+.why-item p{
+  font-size: 14px; line-height: 1.65; color: var(--body);
+}
+
+/* --- CTA BANNER --- */
+.cta-banner{
+  background: var(--ink); color: #fff; padding: 72px 0;
+  text-align: center;
+}
+.cta-banner h2{
+  font-size: 42px; color: #fff; letter-spacing: -1px;
+  line-height: 1.1; margin-bottom: 18px;
+}
+.cta-banner h2 em{ color: var(--red); font-style: normal; }
+.cta-banner p{
+  font-size: 16px; color: rgba(255,255,255,.7);
+  max-width: 520px; margin: 0 auto 32px; line-height: 1.6;
+}
+.cta-banner .btn-primary{
+  background: var(--red); padding: 17px 40px;
+}
+.cta-banner .btn-primary:hover{ background: #E00000; }
+
+/* --- REVIEWS --- */
+.reviews{
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;
+}
+.review{
+  background: #fff; border: 1px solid var(--line);
+  padding: 32px 28px; display: flex; flex-direction: column;
+}
+.review .stars{
+  display: flex; gap: 3px; margin-bottom: 16px; color: var(--red);
+}
+.review .stars svg{ width: 16px; height: 16px; }
+.review p{
+  font-size: 15px; line-height: 1.65; color: var(--body);
+  flex: 1; margin-bottom: 20px;
+}
+.review footer{
+  background: none; border: none; padding: 0;
+  border-top: 1px solid var(--line); padding-top: 16px;
+}
+.review footer strong{
+  display: block; font-size: 13px; color: var(--ink); font-weight: 700;
+}
+.review footer span{
+  font-size: 12px; color: var(--muted);
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 1024px){
+  .home-hero .wrap{ grid-template-columns: 1fr; min-height: auto; }
+  .hero-copy{ padding: 56px 20px 40px; }
+  .hero-copy h1{ font-size: 44px; }
+  .hero-visual{ padding: 40px; min-height: 380px; }
+  .hero-visual .hero-img-wrap{ max-width: 340px; }
+  .surfaces{ grid-template-columns: repeat(2, 1fr); }
+  .why{ grid-template-columns: 1fr; }
+  .why-item{ border-right: none; border-bottom: 1px solid var(--line); padding: 32px 0; }
+  .why-item:not(:first-child){ padding-left: 0; }
+  .reviews{ grid-template-columns: 1fr; }
+  .sec-head h2{ font-size: 28px; }
+  .cta-banner h2{ font-size: 30px; }
+}
+@media (max-width: 560px){
+  .hero-copy h1{ font-size: 34px; }
+  .hero-stats{ flex-wrap: wrap; gap: 24px; }
+  .surfaces{ grid-template-columns: 1fr; }
+  .brands-inner{ gap: 30px; justify-content: center; }
+  .brand-logo{ font-size: 18px; }
+}
+</style>
+</head>
+<body data-page="home">
+<div id="siteHeader"></div>
+
+<!-- ============ HERO ============ -->
+<section class="home-hero">
+  <div class="wrap">
+    <div class="hero-copy">
+      <div class="hero-eyebrow"><span></span> SS26 Collection</div>
+      <h1>Boots built for the <em>last five metres</em> of a game.</h1>
+      <p>Match-tested silhouettes chosen for touch, lockdown fit and stud pattern — not for the box art. Free delivery on orders over R750.</p>
+      <div class="hero-cta">
+        <a href="shop.html" class="btn-primary">Shop All Boots</a>
+        <a href="shop.html?category=Soft%20Ground" class="btn-secondary">Soft Ground</a>
+      </div>
+      <div class="hero-stats">
+        <div><strong>22+</strong><span>Boots in stock</span></div>
+        <div><strong>3</strong><span>Elite brands</span></div>
+        <div><strong>R750+</strong><span>Free delivery</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-img-wrap" id="heroVisual"></div>
+      <div class="price-tag">
+        <small>From</small>
+        <strong>R1,299</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BRAND STRIP ============ -->
+<section class="brands">
+  <div class="wrap">
+    <div class="brands-inner">
+      <a href="shop.html?brand=Nike" class="brand-logo">Nike</a>
+      <a href="shop.html?brand=Adidas" class="brand-logo">Adidas</a>
+      <a href="shop.html?brand=Puma" class="brand-logo">Puma</a>
+      <a href="shop.html" class="brand-logo">New Balance</a>
+      <a href="shop.html" class="brand-logo">Mizuno</a>
+      <a href="shop.html" class="brand-logo">Under Armour</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SURFACE TILES ============ -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Play on any surface.<br>Get the right studs.</h2>
+      <p>Every pitch needs a different boot. Filter by surface and we'll show you the ones that actually grip.</p>
+    </div>
+    <div class="surfaces" id="surfaceTiles"></div>
+  </div>
+</section>
+
+<!-- ============ FEATURED GRID ============ -->
+<section class="featured-wrap">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Trending in the Bootroom.</h2>
+      <a href="shop.html?sort=created-descending" class="link">Shop new arrivals →</a>
+    </div>
+    <div class="grid" id="featuredGrid"></div>
+  </div>
+</section>
+
+<!-- ============ WHY US ============ -->
+<section class="sec" style="padding-bottom:0;">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Why players buy from us.</h2>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="why">
+      <div class="why-item">
+        <div class="why-num">01</div>
+        <h3>Fit-tested, not just listed.</h3>
+        <p>Every boot in our room has been worn and reviewed by actual players on real pitches — from firm dry clay in KZN to soft winter mud.</p>
+      </div>
+      <div class="why-item">
+        <div class="why-num">02</div>
+        <h3>Same-day dispatch.</h3>
+        <p>Order before 2pm on a weekday and we'll get your boots on the courier the same afternoon. Free shipping over R750.</p>
+      </div>
+      <div class="why-item">
+        <div class="why-num">03</div>
+        <h3>Real stock. Real sizes.</h3>
+        <p>No fake inventory, no waiting on backorders. What you see is what we have — and it's counting down per size.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REVIEWS ============ -->
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>From the changeroom.</h2>
+      <p>What players are saying after a few matches.</p>
+    </div>
+    <div class="reviews">
+      <article class="review">
+        <div class="stars">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p>Split a pair of Superflys for the first time — the lockdown around the ankle is unreal. Played 90 minutes with no blisters.</p>
+        <footer><strong>Sipho M.</strong><span>Winger · Pietermaritzburg</span></footer>
+      </article>
+      <article class="review">
+        <div class="stars">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p>The Predators have the best first touch I've had on a boot. Ball just sticks. Worth the money if you play 10.</p>
+        <footer><strong>Thabo K.</strong><span>Midfielder · Durban</span></footer>
+      </article>
+      <article class="review">
+        <div class="stars">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+        </div>
+        <p>Ordered on a Thursday, arrived Friday morning. Sizing was spot on thanks to the size guide. Will buy here again.</p>
+        <footer><strong>Lerato N.</strong><span>Fullback · Johannesburg</span></footer>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta-banner">
+  <div class="wrap">
+    <h2>Stop playing in the wrong boots.<br><em>Find your pair in 30 seconds.</em></h2>
+    <p>Tell us your surface and size, and we'll filter the room down to the boots that actually fit your game.</p>
+    <a href="shop.html" class="btn-primary">Browse the Bootroom →</a>
+  </div>
+</section>
+
+<div id="siteFooter"></div>
+<script src="data.js"></script>
+<script src="script.js"></script>
+<script src="pages.js"></script>
+<script>
+/* ====== HOMEPAGE-ONLY RENDERING ====== */
+document.addEventListener('DOMContentLoaded', () => {
+
+  /* ---------- HERO: pick a featured product and show its photo ---------- */
+  const heroWrap = document.getElementById('heroVisual');
+  if (heroWrap) {
+    /* Prefer a product that has an image */
+    const heroProduct = PRODUCTS.find(p => p.images && p.images.length) || PRODUCTS[0];
+    if (heroProduct.images && heroProduct.images.length) {
+      heroWrap.innerHTML = `<img src="${heroProduct.images[0]}" alt="${heroProduct.name}">`;
+    } else {
+      heroWrap.innerHTML = bootSVG(heroProduct.colors[0]);
+    }
+  }
+
+  /* ---------- SURFACE TILES: pick a representative boot per surface ---------- */
+  const tiles = [
+    { cat:'Firm Ground',  code:'FG', name:'Firm Ground', sub:'Hard, dry pitches',           href:'Firm%20Ground' },
+    { cat:'Soft Ground',  code:'SG', name:'Soft Ground', sub:'Wet, muddy conditions',       href:'Soft%20Ground' },
+    { cat:'Turf',         code:'AG', name:'Turf / AG',   sub:'Artificial grass & 5-a-side',  href:'Turf' },
+    { cat:'Indoor',       code:'IC', name:'Indoor',      sub:'Futsal and court surfaces',   href:'Indoor' },
+  ];
+  const colorByCat = {
+    'Firm Ground': '#C70000',
+    'Soft Ground': '#4C8A5C',
+    'Turf':        '#26344A',
+    'Indoor':      '#1A1A1A',
+  };
+
+  const tileWrap = document.getElementById('surfaceTiles');
+  if (tileWrap) {
+    tileWrap.innerHTML = tiles.map(t => {
+      /* Try to find a real product with a photo for this surface */
+      const sample = PRODUCTS.find(p => p.category === t.cat && p.images && p.images.length);
+      const art = sample
+        ? `<img src="${sample.images[0]}" alt="${t.name}">`
+        : bootSVG(colorByCat[t.cat] || '#C70000');
+
+      return `
+        <a class="surface-tile" href="shop.html?category=${t.href}">
+          <div class="tile-art">${art}</div>
+          <div class="tile-body">
+            <small>${t.code}</small>
+            <h3>${t.name}</h3>
+            <span>${t.sub}</span>
+          </div>
+        </a>
+      `;
+    }).join('');
+  }
+
+  /* ---------- FEATURED GRID: use the shared cardHTML() helper ---------- */
+  const featured = PRODUCTS.filter(p => p.stock > 0).slice(0, 6);
+  const grid = document.getElementById('featuredGrid');
+  if (grid) {
+    grid.innerHTML = featured.map(cardHTML).join('');
+    bindGridEvents('featuredGrid');
+  }
+});
+</script>
+</body>
+</html>

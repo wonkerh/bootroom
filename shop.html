@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soccer Boots — BOOTROOM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+/* ============ SHOP-SPECIFIC OVERRIDES ============ */
+.product-card:hover .product-media .hover-img{ opacity:1 !important; }
+.product-card:hover .product-media img:first-of-type{ opacity:0 !important; }
+.product-card:hover .product-media img{ transform:scale(1.04); }
+</style>
+</head>
+<body data-page="shop">
+
+<div id="siteHeader"></div>
+
+<!-- ============ COLLECTION HEADER ============ -->
+<section class="collection-header">
+  <h1>Soccer Boots</h1>
+  <div class="collection-breadcrumb">
+    <a href="index.html">Home</a> / <span>Soccer Boots</span>
+  </div>
+</section>
+
+<!-- ============ SHOP LAYOUT ============ -->
+<div class="wrap">
+  <button class="mobile-filter-btn" id="mobileFilterToggle">
+    <span>Filters</span>
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M6 12h12M9 18h6"/></svg>
+  </button>
+
+  <div class="shop-layout">
+    <aside class="filters" id="filtersPanel">
+      <div class="filter-block">
+        <div class="filter-head">
+          <h3>Brand</h3>
+          <svg viewBox="0 0 100 100" fill="currentColor"><path d="M96.4,25.73a2,2,0,0,0-2.82,0l-9.66,9.81a2,2,0,0,0-.78.47L50,69.17,16.86,36a2,2,0,0,0-.78-.47L6.42,25.75a2,2,0,1,0-2.84,2.81l45,45.69a2,2,0,0,0,2.84,0l45-45.69A2,2,0,0,0,96.4,25.73Z"/></svg>
+        </div>
+        <div class="filter-body" id="filterBrands"></div>
+      </div>
+      <div class="filter-block">
+        <div class="filter-head">
+          <h3>Surface</h3>
+          <svg viewBox="0 0 100 100" fill="currentColor"><path d="M96.4,25.73a2,2,0,0,0-2.82,0l-9.66,9.81a2,2,0,0,0-.78.47L50,69.17,16.86,36a2,2,0,0,0-.78-.47L6.42,25.75a2,2,0,1,0-2.84,2.81l45,45.69a2,2,0,0,0,2.84,0l45-45.69A2,2,0,0,0,96.4,25.73Z"/></svg>
+        </div>
+        <div class="filter-body" id="filterCategories"></div>
+      </div>
+      <div class="filter-block">
+        <div class="filter-head">
+          <h3>Size (UK)</h3>
+          <svg viewBox="0 0 100 100" fill="currentColor"><path d="M96.4,25.73a2,2,0,0,0-2.82,0l-9.66,9.81a2,2,0,0,0-.78.47L50,69.17,16.86,36a2,2,0,0,0-.78-.47L6.42,25.75a2,2,0,1,0-2.84,2.81l45,45.69a2,2,0,0,0,2.84,0l45-45.69A2,2,0,0,0,96.4,25.73Z"/></svg>
+        </div>
+        <div class="size-grid" id="filterSizes"></div>
+      </div>
+    </aside>
+
+    <div>
+      <div class="toolbar">
+        <div class="count" id="resultCount"></div>
+        <div class="toolbar-right">
+          <select class="sort-select" id="sortSelect">
+            <option value="created-descending">Created descending</option>
+            <option value="price-ascending">Price ascending</option>
+            <option value="price-descending">Price descending</option>
+            <option value="title-ascending">Title ascending</option>
+            <option value="title-descending">Title descending</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid" id="productGrid"></div>
+    </div>
+  </div>
+</div>
+
+<div id="siteFooter"></div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+<script>
+/* ============ SHOP-ONLY LOGIC ============ */
+document.addEventListener('DOMContentLoaded', () => {
+  const params = new URLSearchParams(location.search);
+  if (params.get('category')) state.category = params.get('category');
+  if (params.get('brand'))    state.brand    = params.get('brand');
+  if (params.get('q'))        state.search   = params.get('q').toLowerCase();
+  if (params.get('sort'))     state.sort     = params.get('sort');
+
+  buildFilters();
+  bindSort();
+  bindCollapse();
+  bindMobileFilter();
+  render();
+  bindGrid();
+});
+
+/* ---------- BUILD FILTER SIDEBAR ---------- */
+function buildFilters(){
+  /* Brands */
+  const brands = [...new Set(PRODUCTS.map(p => p.brand))];
+  const brandWrap = document.getElementById('filterBrands');
+  brandWrap.innerHTML = `
+    <label><input type="radio" name="brand" value="All" ${state.brand === 'All' ? 'checked' : ''}> All Brands <span class="count">${PRODUCTS.length}</span></label>
+    ${brands.map(b => `
+      <label>
+        <input type="radio" name="brand" value="${b}" ${state.brand === b ? 'checked' : ''}>
+        ${b}
+        <span class="count">${PRODUCTS.filter(p => p.brand === b).length}</span>
+      </label>
+    `).join('')}
+  `;
+  brandWrap.addEventListener('change', e => {
+    if (e.target.name === 'brand') {
+      state.brand = e.target.value;
+      saveState();
+      render();
+    }
+  });
+
+  /* Surface */
+  const cats = [...new Set(PRODUCTS.map(p => p.category))];
+  const catWrap = document.getElementById('filterCategories');
+  catWrap.innerHTML = `
+    <label><input type="radio" name="cat" value="All" ${state.category === 'All' ? 'checked' : ''}> All Surfaces <span class="count">${PRODUCTS.length}</span></label>
+    ${cats.map(c => `
+      <label>
+        <input type="radio" name="cat" value="${c}" ${state.category === c ? 'checked' : ''}>
+        ${c}
+        <span class="count">${PRODUCTS.filter(p => p.category === c).length}</span>
+      </label>
+    `).join('')}
+  `;
+  catWrap.addEventListener('change', e => {
+    if (e.target.name === 'cat') {
+      state.category = e.target.value;
+      saveState();
+      render();
+    }
+  });
+
+  /* Sizes */
+  const allSizes = ['UK7','UK8','UK9','UK10','UK11','UK12'];
+  const sizeWrap = document.getElementById('filterSizes');
+  sizeWrap.innerHTML = allSizes.map(s => `
+    <button class="size-chip ${state.sizes.includes(s) ? 'active' : ''}" data-size="${s}">${s}</button>
+  `).join('');
+  sizeWrap.addEventListener('click', e => {
+    const btn = e.target.closest('[data-size]');
+    if (!btn) return;
+    const s = btn.dataset.size;
+    if (state.sizes.includes(s)) state.sizes = state.sizes.filter(x => x !== s);
+    else state.sizes.push(s);
+    btn.classList.toggle('active');
+    saveState();
+    render();
+  });
+}
+
+/* ---------- SORT ---------- */
+function bindSort(){
+  const sel = document.getElementById('sortSelect');
+  sel.value = state.sort;
+  sel.addEventListener('change', () => {
+    state.sort = sel.value;
+    saveState();
+    render();
+  });
+}
+
+/* ---------- COLLAPSE FILTER GROUPS ---------- */
+function bindCollapse(){
+  document.querySelectorAll('.filter-head').forEach(h => {
+    h.addEventListener('click', () => h.parentElement.classList.toggle('closed'));
+  });
+}
+
+/* ---------- MOBILE FILTER TOGGLE ---------- */
+function bindMobileFilter(){
+  document.getElementById('mobileFilterToggle').addEventListener('click', () => {
+    document.getElementById('filtersPanel').classList.toggle('open');
+  });
+}
+
+/* ---------- FILTER + SORT ---------- */
+function getFiltered(){
+  let list = PRODUCTS.filter(p => {
+    const sMatch = !state.search || (p.name + p.brand).toLowerCase().includes(state.search);
+    const cMatch = state.category === 'All' || p.category === state.category;
+    const bMatch = state.brand === 'All'    || p.brand === state.brand;
+    const zMatch = state.sizes.length === 0 || state.sizes.some(s => p.sizes.includes(s));
+    return sMatch && cMatch && bMatch && zMatch;
+  });
+  if (state.sort === 'price-ascending')  list.sort((a,b) => a.price - b.price);
+  if (state.sort === 'price-descending') list.sort((a,b) => b.price - a.price);
+  if (state.sort === 'title-ascending')  list.sort((a,b) => a.name.localeCompare(b.name));
+  if (state.sort === 'title-descending') list.sort((a,b) => b.name.localeCompare(a.name));
+  return list;
+}
+
+/* ---------- PRODUCT CARD (fixed nested elements) ---------- */
+function cardHTML(p){
+  const selColor = state.selectedColor[p.id] || p.colors[0];
+  const soldOut = p.stock === 0;
+  const low = p.stock > 0 && p.stock <= 4;
+  const badge = soldOut
+    ? '<span class="badge sold-out">Sold Out</span>'
+    : low ? `<span class="badge low">Only ${p.stock} left</span>` : '';
+
+  const primary = (p.images && p.images.length)
+    ? `<img src="${p.images[0]}" alt="${p.name}" loading="lazy"
+            style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:24px;transition:opacity .35s;">`
+    : bootSVG(selColor);
+
+  const secondary = (p.images && p.images[1])
+    ? `<img src="${p.images[1]}" alt="" loading="lazy" class="hover-img"
+            style="position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:24px;opacity:0;transition:opacity .35s;">`
+    : '';
+
+  return `
+    <div class="product-card" data-id="${p.id}">
+      <div class="product-media">
+        ${badge}
+        <a href="product.html?id=${p.id}" class="media-link" aria-label="${p.name}"></a>
+        ${primary}
+        ${secondary}
+        <div class="quick-actions">
+          <button class="quick-add" data-quick="${p.id}" ${soldOut ? 'disabled' : ''}>
+            ${soldOut ? 'Sold Out' : 'Select Options'}
+          </button>
+          <a class="quick-view-btn" href="product.html?id=${p.id}" title="Quick view" aria-label="Quick view">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="product-info">
+        <div class="product-vendor">${p.brand}</div>
+        <a href="product.html?id=${p.id}" class="product-title">${p.name}</a>
+        <div class="product-price">${fmtZAR(p.price)}</div>
+        <div class="color-swatches">
+          ${p.colors.map(c => `
+            <span style="background:${c}; ${c === selColor ? 'outline:2px solid #C70000; outline-offset:1px;' : ''}"
+                  data-swatch="${c}" data-pid="${p.id}"></span>
+          `).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+/* ---------- RENDER GRID ---------- */
+function render(){
+  const grid = document.getElementById('productGrid');
+  const list = getFiltered();
+  document.getElementById('resultCount').textContent =
+    `${list.length} of ${PRODUCTS.length} products`;
+
+  if (list.length === 0){
+    grid.innerHTML = `
+      <div class="empty-state">
+        <h3>No products match your filters</h3>
+        <p>Try removing some filters or searching for something else.</p>
+      </div>`;
+    return;
+  }
+  grid.innerHTML = list.map(cardHTML).join('');
+}
+
+/* ---------- GRID EVENT HANDLERS ---------- */
+function bindGrid(){
+  const grid = document.getElementById('productGrid');
+  grid.addEventListener('click', e => {
+    const swatch = e.target.closest('[data-swatch]');
+    if (swatch){
+      e.preventDefault();
+      e.stopPropagation();
+      const pid = swatch.dataset.pid;
+      state.selectedColor[pid] = swatch.dataset.swatch;
+      saveState();
+      const card = swatch.closest('.product-card');
+      card.outerHTML = cardHTML(findProduct(pid));
+      return;
+    }
+    const qa = e.target.closest('[data-quick]');
+    if (qa && !qa.disabled){
+      e.preventDefault();
+      e.stopPropagation();
+      location.href = `product.html?id=${qa.dataset.quick}`;
+    }
+  });
+}
+
+/* ---------- SEARCH ---------- */
+function goSearch(){
+  const q = document.getElementById('navSearch').value;
+  location.href = 'shop.html?q=' + encodeURIComponent(q);
+}
+</script>
+</body>
+</html>

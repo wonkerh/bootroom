@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track Order — BOOTROOM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="tracking">
+<div id="siteHeader"></div>
+
+<section class="collection-header">
+  <h1>Track Your Order</h1>
+  <div class="collection-breadcrumb">Enter your order ID to check its status</div>
+</section>
+
+<div class="wrap" style="padding:48px 0 80px;">
+  <form class="track-form" id="trackForm">
+    <input placeholder="Enter order ID (e.g. BR-123456)" required>
+    <button type="submit">Track</button>
+  </form>
+  <div id="trackResult"></div>
+</div>
+
+<div id="siteFooter"></div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+<script src="pages.js"></script>
+</body>
+</html>

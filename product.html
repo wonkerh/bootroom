@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Product — BOOTROOM</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-page="product">
+<div id="siteHeader"></div>
+
+<section class="collection-header">
+  <h1>Product Details</h1>
+  <div class="collection-breadcrumb">
+    <a href="index.html">Home</a> / <a href="shop.html">Soccer Boots</a> / <span id="crumbName">Product</span>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="product-layout" id="productWrap"></div>
+</div>
+
+<div id="siteFooter"></div>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+<script>
+/* ============ PRODUCT PAGE (inline) ============ */
+document.addEventListener('DOMContentLoaded', () => {
+  const id = new URLSearchParams(location.search).get('id') || 'p1';
+  const p = findProduct(id) || PRODUCTS[0];
+  let color  = state.selectedColor[p.id] || p.colors[0];
+  let size   = state.selectedSize[p.id]  || p.sizes[Math.floor(p.sizes.length/2)];
+  let imgIdx = 0;
+
+  document.getElementById('crumbName').textContent = p.name;
+
+  const wrap = document.getElementById('productWrap');
+  const gallery = (p.images && p.images.length) ? p.images : [null];
+
+  const render = () => {
+    const soldOut = p.stock === 0;
+
+    const mainImgHTML = gallery[imgIdx]
+      ? `<img src="${gallery[imgIdx]}" alt="${p.name}"
+              style="width:100%;height:100%;object-fit:contain;display:block;">`
+      : bootSVG(color);
+
+    const thumbsHTML = gallery.length > 1
+      ? `<div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;">
+          ${gallery.map((img, i) => `
+            <button data-thumb="${i}"
+              style="width:76px;height:76px;border:1px solid ${i===imgIdx?'var(--ink)':'var(--line)'};
+                     background:var(--panel);padding:8px;cursor:pointer;">
+              ${img
+                ? `<img src="${img}" style="width:100%;height:100%;object-fit:contain;">`
+                : bootSVG(color)}
+            </button>
+          `).join('')}
+        </div>`
+      : '';
+
+    wrap.innerHTML = `
+      <div>
+        <div class="product-image-main">${mainImgHTML}</div>
+        ${thumbsHTML}
+      </div>
+
+      <div class="product-details">
+        <div class="vendor">${p.brand}</div>
+        <h1>${p.name}</h1>
+        <div class="price">${fmtZAR(p.price)}</div>
+        <p class="desc">${p.desc}</p>
+
+        <div class="option-label">Colour</div>
+        <div class="product-sizes" style="margin-bottom:24px;">
+          ${p.colors.map(c => `
+            <button class="product-size ${c===color?'selected':''}"
+              style="min-width:38px;height:38px;padding:0;background:${c};
+                     border:1px solid ${c===color?'var(--ink)':'var(--line)'};"
+              data-c="${c}" aria-label="Colour ${c}"></button>
+          `).join('')}
+        </div>
+
+        <div class="option-label">Size <small>(UK)</small></div>
+        <div class="product-sizes">
+          ${p.sizes.map(s => `
+            <button class="product-size ${s===size?'selected':''}"
+              data-s="${s}" ${soldOut?'disabled':''}>${s}</button>
+          `).join('')}
+        </div>
+
+        <button class="add-to-cart-lg" id="addBtn"
+          ${soldOut?'disabled style="opacity:.5;cursor:not-allowed;"':''}>
+          ${soldOut ? 'Sold Out' : 'Add to Cart · ' + fmtZAR(p.price)}
+        </button>
+        <div class="stock-note ${p.stock<=4?'low':''}">
+          ${p.stock===0
+            ? 'Out of stock'
+            : p.stock<=4
+              ? `Only ${p.stock} left in stock`
+              : `In stock · ${p.stock} available`}
+        </div>
+      </div>
+    `;
+
+    wrap.querySelectorAll('[data-thumb]').forEach(b => b.addEventListener('click', () => {
+      imgIdx = Number(b.dataset.thumb);
+      render();
+    }));
+    wrap.querySelectorAll('[data-c]').forEach(b => b.addEventListener('click', () => {
+      color = b.dataset.c;
+      state.selectedColor[p.id] = color;
+      saveState();
+      render();
+    }));
+    wrap.querySelectorAll('[data-s]').forEach(b => b.addEventListener('click', () => {
+      if (b.disabled) return;
+      size = b.dataset.s;
+      state.selectedSize[p.id] = size;
+      saveState();
+      render();
+    }));
+    const add = document.getElementById('addBtn');
+    if (add && !soldOut) add.addEventListener('click', () => addToCart(p.id, add, size));
+  };
+
+  render();
+});
+</script>
+</body>
+</html>
